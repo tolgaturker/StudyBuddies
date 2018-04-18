@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="math.js" type="text/javascript"></script>
+
+<style type="text/css">
+
+body {
+  text-align: center;
+  background-color: #D3D3D3;
+}
+label {
+  display: inline-block;
+  font-size: 20px;
+  margin-top: 10px;
+  width: 300px;
+  margin-right: 100px;
+  text-align: left;
+ }
+button[type="submit"] {
+  display: inline-block;
+  margin-top: 40px;
+  width: 250px;
+  height: 30px;
+  border: 2px solid black;
+  font-size: 20;
+ }
+ input[name="nameInput"] {
+
+   width: 400px;
+   height: 25px;
+   border: 2px solid black;
+  }
+input[name="courseInput"] {
+
+  width: 400px;
+  height: 25px;
+  border: 2px solid black;
+ }
+select[name="groupSizeList"]{
+  width: 400px;
+  height: 25px;
+  font-size: 15px;
+  border: 2px solid black;
+}
+textarea[name="additionalInfo"] {
+
+  width: 400px;
+  height: 150px;
+  border: 2px solid black;
+  font-size: 15px;
+ }
+ a[id="append"]{
+   display: table-cell;
+   width: inherit;
+   height: 25px;
+   background-color: white;
+   padding: 6px;
+   border: 2px solid gray;
+   cursor: default;
+ }
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+</head>
+<body>
+ <h1>Post Submit Page</h1>
+  <h2>Create A Post</h2>
+<a id="append" href="http://web.uvic.ca/~tolgaturker/main.html" >Back</a>
+ <form action="main.html" method="post" id="createPost">
+   <label for="nameInput">Name:</label>
+   <br>
+   <input type="text" name="nameInput" id="nameInput">
+ <br>
+   <label for="courseInput">Course:</label>
+   <br>
+   <input type="text" name="courseInput" id="courseInput">
+ <br>
+   <label for="groupSizeList">Group Size:</label>
+   <br>
+   <select name="groupSizeList" id="groupSizeList">
+     <option>Select Size...</option>
+     <option>3</option>
+     <option>4</option>
+     <option>5</option>
+     <option>6</option>
+     <option>7</option>
+   </select>
+ <br>
+   <label for="additionalInfo">Additional Info:</label>
+   <br>
+   <textarea name="additionalInfo" id="additionalInfo"></textarea>
+ <br>
+ <input type="hidden" name="timeStamp" id="timeStamp"></input>
+ <input type="hidden" name="postId" id="postId"></input>
+ <button type="submit" id="submitForm" onclick="addHiddenValues()">Create Post</button>
+ </form>
+
+
+<script>
+var $form = $('form#createPost'),
+    url = 'https://script.google.com/macros/s/AKfycbyyxRO-AGa4znN0f79hQ7W3jtfS0ZR78QZgaa-CWfu6_k0fEELs/exec'
+
+$('#submitForm').on('click', function(e) {
+  if(document.getElementById("nameInput").value!=="" && document.getElementById("courseInput").value!=="" && document.getElementById("groupSizeList").value!=="Select Size..."){
+    e.preventDefault();
+    var jqxhr = $.ajax({
+      url: url,
+      method: "GET",
+      dataType: "json",
+      data: $form.serializeArray()
+    }).success(
+      alert("success")
+      //  window.location.href = "main.html";
+    );
+  }else{
+    alert("Missing info");
+  }
+})
+
+
+function addHiddenValues(){
+  document.getElementById("timeStamp").value=getTimeStamp();
+  document.getElementById("postId").value=generateId();
+  window.location.href = "http://web.uvic.ca/~tolgaturker/main.html";
+}
+
+function generateId(){
+  return Math.random().toString(36).replace('0.', '');
+}
+
+function getTimeStamp() {
+// Create a date object with the current time
+  var now = new Date();
+
+// Create an array with the current month, day and time
+  var date = [ now.getMonth() + 1, now.getDate(), now.getFullYear() ];
+
+// Create an array with the current hour, minute and second
+  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
+
+// Determine AM or PM suffix based on the hour
+  var suffix = ( time[0] < 12 ) ? "AM" : "PM";
+
+// Convert hour from military time
+  time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+
+// If hour is 0, set it to 12
+  time[0] = time[0] || 12;
+
+// If seconds and minutes are less than 10, add a zero
+  for ( var i = 1; i < 3; i++ ) {
+    if ( time[i] < 10 ) {
+      time[i] = "0" + time[i];
+    }
+  }
+
+// Return the formatted string
+  return date.join("/") + " " + time.join(":") + " " + suffix;
+}
+</script>
+</body>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+
+body {
+  background-color: #D3D3D3;
+  text-align: center;
+}
+h1{
+  text-align: center;
+}
+div[class="postWindow"]{
+  width: 500px;
+  height: 200px;
+  background-color: #F5F5F5;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid gray;
+  margin-bottom: 10px;
+}
+div[id="studentNameBox"]{
+  width: 500px;
+  height: 40px;
+  border-bottom: 2px solid gray;
+  font-size: 30px;
+  text-align: center;
+}
+div[id="courseNameBox"]{
+  width: 500px;
+  height: 40px;
+  border-bottom: 2px solid gray;
+  font-size: 30px;
+  text-align: center;
+}
+div[id="additionalInfoBox"]{
+  width: 500px;
+  height: 90px;
+  border-bottom: 2px solid gray;
+}
+div[id="sizeAndStampBox"]{
+  display:flex;
+  justify-content:space-between;
+  width: 500px;
+  height: 25px;
+}
+div[id="sizeBox"]{
+  float: left;
+}
+div[id="StampBox"]{
+float: right;
+}
+#postId{
+  display: none;
+  visibility: hidden;
+}
+input[type="submit"] {
+  display: inline-block;
+  margin-top: 40px;
+  width: 250px;
+  height: 30px;
+  border: 2px solid black;
+  font-size: 20;
+  background-color: #F5F5F5;
+ }
+ a[id="goBack"]{
+   display: table-cell;
+   width: inherit;
+   height: 25px;
+   background-color: white;
+   padding: 6px;
+   border: 2px solid gray;
+   cursor: default;
+ }
+ </style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+</head>
+<body>
+  <h1>Detailed View</h1>
+  <a id="goBack" href="http://web.uvic.ca/~tolgaturker/main.html" >Back</a>
+  <div class="parent" id="parent"></div>
+
+  <form action="http://web.uvic.ca/~tolgaturker/main.html">
+    <input type="submit" value="Join This Group" onclick="joinGroup();">
+</form>
+
+<script>
+
+function joinGroup(){
+  alert("You joined this group, please wait for Library RVSP notification from post owner.");
+}
+
+$(document).ready(function() {
+  $.getJSON("http://danycabrera.com/csc130/proxy.php?key=1FGtSyHf7m6cxNnauegJSD_37xwH8FZZhLVEkNja8UPg&sheet=MyDataset", processData);
+});
+
+function processData(data) {
+
+  var nameInput = [];
+  var courseInput = [];
+  var groupSizeList = [];
+  var additionalInfo = [];
+  var timeStamp = [];
+  var postId = [];
+
+  // use a loop to fill the arrays with our data
+  for (var i = 0 ; i <data.length ; i++) {
+    if(data[i].courseInput!=undefined && data[i].courseInput!="" && data[i].postId==getQueryVariable("id")){
+      nameInput[0] = data[i].nameInput;
+      courseInput[0] = data[i].courseInput;
+      groupSizeList[0] = data[i].groupSizeList;
+      additionalInfo[0] = data[i].additionalInfo;
+      timeStamp[0] = data[i].timeStamp;
+      postId[0] = data[i].postId;
+    }
+  }
+  var newHTMLstring="";
+
+
+    newHTMLstring+='<div class="postWindow" id="'+postId[0]+'" onclick="myFunction(this.id);"><div class="studentNameBox" id="studentNameBox"><label for="studentNameBox" id="studentNameLabel">'+nameInput[0]+'</label></div><div class="courseNameBox" id="courseNameBox"><label for="courseNameBox" id="courseNameLabel">'+courseInput[0]+'</label></div><div class="additionalInfoBox" id="additionalInfoBox"><label for="additionalInfoBox" id="additionalInfoLabel">'+additionalInfo[0]+'</label></div><div class="sizeAndStampBox" id="sizeAndStampBox"><label for="sizeAndStampBox" id="groupSizeLabel">Size: '+groupSizeList[0]+'</label><label for="sizeAndStampBox" id="timeStampLabel">'+timeStamp[0]+'</label></div></div>';
+
+  document.getElementById("parent").innerHTML=newHTMLstring;
+  console.log(data);
+}
+
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
+</script>
+</body>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<style type="text/css">
+
+body {
+  background-color: #D3D3D3;
+}
+h1{
+  text-align: center;
+}
+
+a[id="goBack"]{
+  display: table-cell;
+  width: inherit;
+  height: 25px;
+  background-color: white;
+  padding: 6px;
+  border: 2px solid gray;
+  cursor: default;
+  float:left;
+}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
+</head>
+<body style="">
+  <h1>Study Buddies</h1>
+  <a id="goBack" href="http://web.uvic.ca/~tolgaturker/main.html" >Back</a>
+  <canvas id="myChart01" width="400" height="200"></canvas>
+  <canvas id="myChart02" width="400" height="200"></canvas>
+  <h2>This page is dedicated to statistical information on various student habits and how these habits reflect onto their course performance. As seen on above graphs, raising hand and asking questions increases understanding of course material. Likewise, the use of external materials and futher research/exploration on course materials also increases overall course performance. Keep these information in mind while studying. </h2>
+<script>
+function processData01(myData) {
+  // create empty arrays for my chart values and labels
+  var raisedhands = [];
+  var gradescale = [];
+  //var myColors = [];
+
+  // use a loop to fill the arrays with our data
+  for (var i = 0 ; i < myData.length ; i++) {
+    var temp=myData[i].raisedhands;
+
+    if(temp % 10===0){
+      gradescale[i] = myData[i].Class;
+      raisedhands[i] = temp;
+    }
+
+    //myColors[i] = myData[i].Color
+  }
+  console.log(myData);
+  console.log(raisedhands);
+  console.log(gradescale);
+  // use the Chart.js library to draw the chart
+  var myChart = new Chart($("#myChart01"), {
+    type: 'bar', // try other types: line, bar, pie, doughnut, polarArea
+    data: {
+      labels: gradescale,
+      datasets: [{
+        data: raisedhands,
+        backgroundColor: 'rgba(200, 0, 0, 1)',
+        label: "raised hands in lectures"
+      }]
+    },
+    "options":{title:{display:true, text:'Number of Raised Hands in Lectures Against Overall Grades', fontSize:40}, "scales":{"yAxes":[{"ticks":{ "beginAtZero": true }}]}}
+  });
+}
+function processData02(myData) {
+  // create empty arrays for my chart values and labels
+  var VisitedResources = [];
+  var gradescale = [];
+  //var myColors = [];
+
+  // use a loop to fill the arrays with our data
+  for (var i = 0 ; i < myData.length ; i++) {
+    var temp=myData[i].VisitedResources;
+
+    if(temp % 10===0){
+      gradescale[i] = myData[i].Class;
+      VisitedResources[i] = temp;
+    }
+
+    //myColors[i] = myData[i].Color
+  }
+  console.log(myData);
+  console.log(VisitedResources);
+  console.log(gradescale);
+  // use the Chart.js library to draw the chart
+  var myChart = new Chart($("#myChart02"), {
+    type: 'bar', // try other types: line, bar, pie, doughnut, polarArea
+    data: {
+      labels: gradescale,
+      datasets: [{
+        data: VisitedResources,
+        backgroundColor: 'rgba(200, 0, 0, 1)',
+        label: "Visited Resources for Study"
+      }]
+    },
+    "options":{title:{display:true, text:'Number of Resources Visited Against Overall Grades', fontSize:40}, "scales":{"yAxes":[{"ticks":{ "beginAtZero": true }}]}}
+  });
+}
+
+$(document).ready(function() {
+  $.getJSON("http://danycabrera.com/csc130/proxy.php?key=1ACTiuPhFckaLbE3jHbRxIOVjkJHhQpx-xkQol3_dxHM&sheet=MyDataset", processData01);
+});
+
+$(document).ready(function() {
+  $.getJSON("http://danycabrera.com/csc130/proxy.php?key=1gMwO_tdI2Cu0kpc8dUFPrS7cte6HHmuXnECBLSWejIs&sheet=MyDataset", processData02);
+});
+
+</script>
+</body>

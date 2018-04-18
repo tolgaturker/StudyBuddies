@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<style type="text/css">
+
+body {
+  background-color: #D3D3D3;
+}
+h1{
+  text-align: center;
+}
+div[class="postWindow"]{
+  width: 500px;
+  height: 200px;
+  background-color: #F5F5F5;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid gray;
+  margin-bottom: 10px;
+}
+div[id="studentNameBox"]{
+  width: 500px;
+  height: 40px;
+  border-bottom: 2px solid gray;
+  font-size: 30px;
+  text-align: center;
+}
+div[id="courseNameBox"]{
+  width: 500px;
+  height: 40px;
+  border-bottom: 2px solid gray;
+  font-size: 30px;
+  text-align: center;
+}
+div[id="additionalInfoBox"]{
+  width: 500px;
+  height: 90px;
+  border-bottom: 2px solid gray;
+}
+div[id="sizeAndStampBox"]{
+  display:flex;
+  justify-content:space-between;
+  width: 500px;
+  height: 25px;
+}
+div[id="sizeBox"]{
+  float: left;
+}
+div[id="StampBox"]{
+float: right;
+}
+#postId{
+  display: none;
+  visibility: hidden;
+}
+a[id="goBack"]{
+  display: table-cell;
+  width: inherit;
+  height: 25px;
+  background-color: white;
+  padding: 6px;
+  border: 2px solid gray;
+  cursor: default;
+  float:left;
+}
+a[id="help"]{
+  display: table-cell;
+  width: inherit;
+  height: 25px;
+  background-color: white;
+  padding: 6px;
+  border: 2px solid gray;
+  cursor: default;
+  float: right;
+}
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+
+</head>
+<body style="">
+  <h1>Study Buddies</h1>
+  <a id="goBack" href="http://web.uvic.ca/~tolgaturker/createAPost.html" >Create Post</a>
+  <a id="help" href="http://web.uvic.ca/~tolgaturker/studentHelp.html" >Student Help</a>
+  <div class="parent" id="parent"><form class="postWindow" action="http://web.uvic.ca/~tolgaturker/detailedView.html"></div>
+
+
+<script>
+
+
+
+function processData(data) {
+
+
+  var nameInput = [];
+  var courseInput = [];
+  var groupSizeList = [];
+  var additionalInfo = [];
+  var timeStamp = [];
+  var postId = [];
+
+  // use a loop to fill the arrays with our data
+  for (var i = 0 ; i <data.length ; i++) {
+    if(data[i].courseInput!=undefined && data[i].courseInput!=""){
+      nameInput[i] = data[i].nameInput;
+      courseInput[i] = data[i].courseInput;
+      groupSizeList[i] = data[i].groupSizeList;
+      additionalInfo[i] = data[i].additionalInfo;
+      timeStamp[i] = data[i].timeStamp;
+      postId[i] = data[i].postId;
+    }
+  }
+  var newHTMLstring="";
+  for(var i=data.length-1; i>=0; i--){
+
+    newHTMLstring+='<div class="postWindow" id="'+postId[i]+'" onclick="myFunction(this.id);"><div class="studentNameBox" id="studentNameBox"><label for="studentNameBox" id="studentNameLabel">'+nameInput[i]+'</label></div><div class="courseNameBox" id="courseNameBox"><label for="courseNameBox" id="courseNameLabel">'+courseInput[i]+'</label></div><div class="additionalInfoBox" id="additionalInfoBox"><label for="additionalInfoBox" id="additionalInfoLabel">'+additionalInfo[i]+'</label></div><div class="sizeAndStampBox" id="sizeAndStampBox"><label for="sizeAndStampBox" id="groupSizeLabel">Size: '+groupSizeList[i]+'</label><label for="sizeAndStampBox" id="timeStampLabel">'+timeStamp[i]+'</label></div></div>';
+  }
+  document.getElementById("parent").innerHTML=newHTMLstring;
+  console.log(data);
+}
+
+
+$(document).ready(function() {
+  $.getJSON("http://danycabrera.com/csc130/proxy.php?key=1FGtSyHf7m6cxNnauegJSD_37xwH8FZZhLVEkNja8UPg&sheet=MyDataset", processData);
+});
+
+//https://docs.google.com/spreadsheets/d/1FGtSyHf7m6cxNnauegJSD_37xwH8FZZhLVEkNja8UPg/edit?usp=sharing
+
+
+  function myFunction(clickedId){
+  //alert("This button leads to detailed view page!");
+  //alert(clickedId);
+  window.location.href = "http://web.uvic.ca/~tolgaturker/detailedView.html?id="+clickedId;
+}
+
+</script>
+</body>
